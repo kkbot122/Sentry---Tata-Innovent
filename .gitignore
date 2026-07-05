@@ -1,0 +1,30 @@
+docs/
+frontend.pre-create-next-backup/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+
+# Environment
+.env
+.env.local
+
+# Local data/model artifacts
+data/raw/*
+data/processed/*
+models/*
+outputs/*
+
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!models/.gitkeep
+!outputs/.gitkeep
+!outputs/screenshots/
+!outputs/screenshots/.gitkeep

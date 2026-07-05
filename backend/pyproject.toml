@@ -1,0 +1,25 @@
+[project]
+name = "bearing-fault-backend"
+version = "0.1.0"
+description = "FastAPI backend and edge inference pipeline for the bearing fault hackathon demo."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.116.0",
+    "uvicorn[standard]>=0.35.0",
+    "numpy>=2.0.0",
+    "pandas>=2.2.0",
+    "scipy>=1.14.0",
+    "scikit-learn>=1.5.0",
+    "joblib>=1.4.0",
+    "matplotlib>=3.9.0",
+    "seaborn>=0.13.0",
+    "jupyter>=1.1.0",
+    "python-dotenv>=1.0.0",
+]
+
+[dependency-groups]
+dev = []
+
+[tool.uv]
+package = false
