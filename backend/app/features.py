@@ -1,16 +1,25 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
+from dataclasses import dataclass
+
 import numpy as np
 from scipy.stats import kurtosis
 
 
-FEATURE_COLUMNS = [
+FEATURE_COLUMNS = (
     "rms",
     "std",
     "kurtosis",
     "dominant_freq_hz",
     "spectral_energy",
-]
+)
+
+
+@dataclass(frozen=True)
+class FeatureVector:
+    values: dict[str, float]
+    model_input: np.ndarray
 
 
 def extract_features(signal_window: np.ndarray, sample_rate_hz: int) -> dict[str, float]:
@@ -36,6 +45,33 @@ def extract_features(signal_window: np.ndarray, sample_rate_hz: int) -> dict[str
         "dominant_freq_hz": dominant_freq_hz,
         "spectral_energy": float(np.sum(np.square(magnitudes)) / signal.size),
     }
+
+
+def features_to_model_input(
+    features: Mapping[str, float],
+    feature_columns: tuple[str, ...] = FEATURE_COLUMNS,
+) -> np.ndarray:
+    missing_features = [feature for feature in feature_columns if feature not in features]
+    if missing_features:
+        joined_features = ", ".join(missing_features)
+        raise KeyError(f"Missing model features: {joined_features}")
+
+    return np.array(
+        [[float(features[feature]) for feature in feature_columns]],
+        dtype=float,
+    )
+
+
+def extract_feature_vector(
+    signal_window: np.ndarray,
+    sample_rate_hz: int,
+    feature_columns: tuple[str, ...] = FEATURE_COLUMNS,
+) -> FeatureVector:
+    values = extract_features(signal_window, sample_rate_hz)
+    return FeatureVector(
+        values=values,
+        model_input=features_to_model_input(values, feature_columns),
+    )
 
 
 def window_signal(
